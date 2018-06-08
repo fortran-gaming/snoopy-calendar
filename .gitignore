@@ -1,3 +1,6 @@
+*.txt
+snpcal
+snpcal.exe
 # Prerequisites
 *.d
 
