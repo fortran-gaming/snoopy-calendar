@@ -66,9 +66,9 @@ C     ******************************************************************
       read(ur,4) MF,IYR,MTHLST,IYRLST,LNSW
 
       write(argv,'(I4)') iyr
-      if (command_argument_count() > 1)  then
+      if (command_argument_count() > 0)  then
         call get_command_argument(1, argv, status=ios)
-        write(argv,*) iyr
+        read(argv,'(I4)') iyr
         iyrlst = iyr + 1
       endif
 
