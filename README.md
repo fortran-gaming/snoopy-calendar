@@ -2,16 +2,16 @@
 
 # Snoopy Calendar
 
-The classic Fortran calendar.
+The classic Fortran 66 Peanuts calendar generator...with a dash of Fortran 2008!
 
 Modified:
 
 * uses Fortran 2008 file open() and close()
-* allows command line input of year (default 1969)
-* remove Hollerith characters
+* allows Fortran 2003 command line input of year (default 1969)
+* remove Fortran 66 Hollerith characters
 
 ## Build
-Assuming any Fortran compiler (tested with Gfortran 4.8+, PGI, Flang and Intel) and GNU Make:
+Assuming any modern Fortran compiler (tested with Gfortran 4.8+, PGI 2017+, Flang 5.0 and Intel 2018+) and GNU Make:
 
 ```bash
 make
