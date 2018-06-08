@@ -4,11 +4,11 @@
 
 The classic Fortran calendar.
 
-Modified in two regards:
+Modified:
 
 * uses Fortran 2008 file open() and close()
 * allows command line input of year (default 1969)
-
+* remove Hollerith characters
 
 ## Build
 Assuming any Fortran compiler (tested with Gfortran 4.8+, PGI, Flang and Intel) and GNU Make:

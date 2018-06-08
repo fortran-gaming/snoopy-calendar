@@ -1,5 +1,3 @@
-! open() and close() modified for Fortran 2008 newunit.
-
 C     SNOOPY CALENDAR PROGRAM FOR PDP-11 FORTRAN
 C     TAKEN FROM (NON-WORKING) IBM FORTRAN+BAL VERSION
 C     MODIFICATIONS BY T. M. KENNEDY 29-DEC-84
@@ -48,12 +46,15 @@ C     *    -4    LIST CARDS, TWO PER LINE, FORMAT 11A6/11A6            *
 C     *    -5    LIST CARDS, TWO PER LINE, FORMAT 12A6/10A6            *
 C     *                                                                *
 C     ******************************************************************
-      use, intrinsic:: iso_fortran_env, only: error_unit
-      IMPLICIT REAL*8 (A-H,O-Z)
-      DIMENSION AMONTH (12,7,13), ANAM(22), ANUM(2,10,5), NODS(12),
-     &          CAL(60,22)
-      COMMON ISET
+      use, intrinsic:: iso_fortran_env, only: error_unit, real64
 
+      IMPLICIT REAL(real64) (A-H,O-Z)
+
+      real(real64) :: AMONTH (12,7,13), ANAM(22), ANUM(2,10,5),
+     &          CAL(60,22)
+      integer :: NODS(12)
+      integer, parameter :: iset=25
+      
       integer :: ur, uw, ios
       character(4) :: argv
       character(6+4+4) :: filename
@@ -85,7 +86,7 @@ C     ******************************************************************
       print *,'Generating year '//argv//' calendar into '
      &        //filename//'...'
 
-      ISET=25
+
       DO 10 I=1,60
       DO 10 J=1,22
 10    CAL(I,J)= BLANK
@@ -187,7 +188,7 @@ C     ******************************************************************
 225   II=54
       ID=1
       GO TO 205
-230   CALL SNPPIC(ur, uw)
+230   CALL SNPPIC(ur, uw, iset)
 
       WRITE (uw,'(22A6)') ((CAL(I,J),J=1,22),I=1,60)
 51    CONTINUE

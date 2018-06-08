@@ -1,13 +1,13 @@
-      SUBROUTINE SNPPIC(ur, uw)
+      SUBROUTINE SNPPIC(ur, uw, iset)
 C     THIS SUBROUTINE WILL ANALYZE THE INPUT DATA AND PRINT A PICTURE
 C     YOU CAN EXPECT TO GET 1 WARNING MESSAGE DURING COMPILATION
-      integer, intent(in) :: ur, uw
+      integer, intent(in) :: ur, uw, iset
       integer :: ILINE(133),INUM(50),ICHR(50)
-      COMMON ISET
-      DATA IBLNK/1H /
+
+      character, parameter :: blnk = ' '
 
       DO 4 I=1,133
-    4 ILINE(I)=IBLNK
+    4 ILINE(I) = iachar(blnk)
     5 K=1
    10 READ(ur,1000) (INUM(I),ICHR(I),I=1,ISET)
       DO 40 I=1,ISET
@@ -16,7 +16,7 @@ C     HERE WE WRITE A LINE TO THE PRINTER AND GO BUILD ANOTHER
       DO 15 L=K,133
    15 ILINE(L)=ICHR(I)
       WRITE(uw,2000) (ILINE(K),K=1,133)
-      ILINE(1)=IBLNK
+      ILINE(1) = iachar(blnk)
       DO 20 K=2,133
    20 ILINE(K)=ICHR(I)
       K=1
@@ -34,4 +34,4 @@ C     HERE WE EXIT THE PICTURE AND RETURN TO THE CALLING PROGRAM
 C     FORMAT STATEMENTS
  1000 FORMAT (25(I2,A1))
  2000 FORMAT (133A1)
-      END
+      END SUBROUTINE SNPPIC
