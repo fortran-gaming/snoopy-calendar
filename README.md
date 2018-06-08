@@ -17,6 +17,11 @@ Assuming any modern Fortran compiler (tested with Gfortran 4.8+, PGI 2017+, Flan
 make
 ```
 
+test output with
+```bash
+make test
+```
+
 ## Usage
 
 Year is optional, default is 1969. 
