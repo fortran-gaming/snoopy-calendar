@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.com/fortran-gaming/snoopy-calendar.svg?branch=master)](https://travis-ci.com/fortran-gaming/snoopy-calendar)
 
-# Snoopy Calendar
+# Fortran Snoopy Calendar
 
 The classic Fortran 66 Peanuts calendar generator...with a dash of Fortran 2008!
 
