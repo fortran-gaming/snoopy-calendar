@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/fortran-gaming/snoopy-calendar.svg?branch=master)](https://travis-ci.com/fortran-gaming/snoopy-calendar)
+
 # Snoopy Calendar
 
 The classic Fortran calendar.
@@ -9,7 +11,7 @@ Modified in two regards:
 
 
 ## Build
-Assuming any Fortran compiler (tested with Gfortran, PGI, Flang and Intel) and GNU Make:
+Assuming any Fortran compiler (tested with Gfortran 4.8+, PGI, Flang and Intel) and GNU Make:
 
 ```bash
 make
