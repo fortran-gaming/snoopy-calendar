@@ -46,7 +46,8 @@ C     *    -4    LIST CARDS, TWO PER LINE, FORMAT 11A6/11A6            *
 C     *    -5    LIST CARDS, TWO PER LINE, FORMAT 12A6/10A6            *
 C     *                                                                *
 C     ******************************************************************
-      use, intrinsic:: iso_fortran_env, only: error_unit, real64
+      use, intrinsic:: iso_fortran_env, only: output_unit, error_unit,
+     &     real64
 
       IMPLICIT REAL(real64) (A-H,O-Z)
 
@@ -55,7 +56,7 @@ C     ******************************************************************
       integer :: NODS(12)
       integer, parameter :: iset=25
       
-      integer :: ur, uw, ios
+      integer :: ur, uw
       character(4) :: argv
       character(6+4+4) :: filename
 
@@ -69,22 +70,29 @@ C     ******************************************************************
 
       write(argv,'(I4)') iyr
       if (command_argument_count() > 0)  then
-        call get_command_argument(1, argv, status=ios)
+        call get_command_argument(1, argv)
         read(argv,'(I4)') iyr
         iyrlst = iyr + 1
       endif
-
-
-      filename = 'snpcal'//argv//'.txt'
-      open(newunit=uw,file=filename,status='replace',action='write')
-
+! -- request to output to stdout instead of file
+      if (command_argument_count() > 1) then
+        call get_command_argument(2, argv)
+      endif 
+      
+      if (argv=='-') then
+        uw = output_unit
+      else
+        print *,'Generating year '//argv//' calendar into '
+     &        //filename//'...'
+        filename = 'snpcal'//argv//'.txt'
+        open(newunit=uw,file=filename,status='replace',action='write')
+      endif
+      
+      
       if (iyr<1753.or.iyr>3999) then
         write(error_unit,*) 'WARNING: algorithm may be inaccurate'//
      &                      ' for year', iyr
       endif
-
-      print *,'Generating year '//argv//' calendar into '
-     &        //filename//'...'
 
 
       DO 10 I=1,60

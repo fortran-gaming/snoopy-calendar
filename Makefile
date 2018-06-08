@@ -6,6 +6,5 @@ clean:
 	$(RM) snpcal
 	
 test:
-	./snpcal 2018
-	@diff 	snpcal2018.txt ref/snpcal2018.txt 
+	./snpcal 2018 - | diff --text -a - ref/snpcal2018.txt 
 	@echo OK
