@@ -201,12 +201,10 @@ C     ******************************************************************
 100   close(ur)
       close(uw)
       print *,'DONE'
-      STOP
 
 1     FORMAT (13A6)
 2     FORMAT (11A6)
 3     FORMAT (10A6)
 4     FORMAT (12I6)
 
-    6 FORMAT(/,1X)
       END program

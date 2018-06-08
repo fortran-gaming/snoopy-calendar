@@ -4,34 +4,38 @@ C     YOU CAN EXPECT TO GET 1 WARNING MESSAGE DURING COMPILATION
       integer, intent(in) :: ur, uw, iset
       integer :: ILINE(133),INUM(50),ICHR(50)
 
-      character, parameter :: blnk = ' '
+      integer, parameter :: iblnk = iachar(' ')
 
-      DO 4 I=1,133
-    4 ILINE(I) = iachar(blnk)
-    5 K=1
-   10 READ(ur,1000) (INUM(I),ICHR(I),I=1,ISET)
-      DO 40 I=1,ISET
-      IF (INUM(I) .NE. -1) GOTO 100
-C     HERE WE WRITE A LINE TO THE PRINTER AND GO BUILD ANOTHER
-      DO 15 L=K,133
-   15 ILINE(L)=ICHR(I)
-      WRITE(uw,2000) (ILINE(K),K=1,133)
-      ILINE(1) = iachar(blnk)
-      DO 20 K=2,133
-   20 ILINE(K)=ICHR(I)
+      DO I=1,133
+        ILINE(I) = iblnk
+      enddo
       K=1
+
+   10 READ(ur, '(25(I2,A1))') (INUM(I),ICHR(I),I=1,ISET)
+   
+      DO I=1,ISET
+        IF (INUM(I) .NE. -1) GOTO 100
+C     HERE WE WRITE A LINE TO THE PRINTER AND GO BUILD ANOTHER
+        DO L=K,133
+          ILINE(L)=ICHR(I)
+        enddo
+        
+        WRITE(uw,'(133A1)') (ILINE(K),K=1,133)
+        ILINE(1) = iblnk
+        DO  K=2,133
+          ILINE(K)=ICHR(I)
+        enddo
+        
+        K=1
 C error      I=I+1
-  100 IF (INUM(I) .EQ. -2) GOTO 200
-      IF (INUM(I) .EQ. 0) GOTO 40
-      DO 30 J=1,INUM(I)
-      ILINE(K)=ICHR(I)
-      K=K+1
-   30 CONTINUE
-   40 CONTINUE
+  100   IF (INUM(I) .EQ. -2) return
+        IF (INUM(I) .EQ. 0) cycle
+        DO J=1,INUM(I)
+          ILINE(K)=ICHR(I)
+          K=K+1
+        enddo
+      enddo
       GOTO 10
-C     HERE WE EXIT THE PICTURE AND RETURN TO THE CALLING PROGRAM
-  200 RETURN
-C     FORMAT STATEMENTS
- 1000 FORMAT (25(I2,A1))
- 2000 FORMAT (133A1)
+
+ 
       END SUBROUTINE SNPPIC
