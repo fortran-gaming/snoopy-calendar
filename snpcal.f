@@ -48,6 +48,7 @@ C     *    -4    LIST CARDS, TWO PER LINE, FORMAT 11A6/11A6            *
 C     *    -5    LIST CARDS, TWO PER LINE, FORMAT 12A6/10A6            *
 C     *                                                                *
 C     ******************************************************************
+      use, intrinsic:: iso_fortran_env, only: error_unit
       IMPLICIT REAL*8 (A-H,O-Z)
       DIMENSION AMONTH (12,7,13), ANAM(22), ANUM(2,10,5), NODS(12),
      &          CAL(60,22)
@@ -75,6 +76,14 @@ C     ******************************************************************
 
       filename = 'snpcal'//argv//'.txt'
       open(newunit=uw,file=filename,status='replace',action='write')
+
+      if (iyr<1753.or.iyr>3999) then
+        write(error_unit,*) 'WARNING: algorithm may be inaccurate'//
+     &                      ' for year', iyr
+      endif
+
+      print *,'Generating year '//argv//' calendar into '
+     &        //filename//'...'
 
       ISET=25
       DO 10 I=1,60
@@ -190,6 +199,7 @@ C     ******************************************************************
 
 100   close(ur)
       close(uw)
+      print *,'DONE'
       STOP
 
 1     FORMAT (13A6)

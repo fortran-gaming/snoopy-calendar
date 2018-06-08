@@ -9,7 +9,7 @@ Modified in two regards:
 
 
 ## Build
-Assuming any Fortran compiler and GNU Make:
+Assuming any Fortran compiler (tested with Gfortran, PGI, Flang and Intel) and GNU Make:
 
 ```bash
 make
@@ -23,6 +23,8 @@ To make a 2018 calendar:
 ```bash
 ./snpcal 2018
 ```
+
+It seems from a cursory check that the output may be valid from year 1753 through year 3000 or more.
 
 ### Output
 
