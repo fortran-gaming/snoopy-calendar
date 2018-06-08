@@ -38,3 +38,7 @@ It seems from a cursory check that the output may be valid from year 1753 throug
 The calendar is created in `snpcal2018.txt` (or whatever your year is).
 Be sure line wrapping is turned off in your text editor to view the calendar properly.
 The lines are 132 characters + newline long.
+
+## Hacking
+The cartoon character writing code is all in `snppic.f`.
+Simply commenting out line 230 (replacing with `230 continue`) generates just the calendar, so it's straightforward to make a new few line `snppic()` that inputs your own Text art files.
