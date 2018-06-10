@@ -56,7 +56,7 @@ C     ******************************************************************
       integer :: NODS(12)
       integer, parameter :: iset=25
       
-      integer :: ur, uw
+      integer :: ur, uw, ios
       character(4) :: argv
       character(6+4+4) :: filename
 
@@ -68,27 +68,12 @@ C     ******************************************************************
       read(ur,1) BLANK,ONE,ALIN1,ALIN2,ALIN3,ALIN4
       read(ur,4) MF,IYR,MTHLST,IYRLST,LNSW
 
-      write(argv,'(I4)') iyr
-      if (command_argument_count() > 0)  then
-        call get_command_argument(1, argv)
-        read(argv,'(I4)') iyr
-        iyrlst = iyr + 1
-      endif
-! -- request to output to stdout instead of file
-      if (command_argument_count() > 1) then
-        call get_command_argument(2, argv)
-      endif 
+      call get_command_argument(1, argv, status=ios)
+      if (ios==0) read(argv,'(I4)', iostat=ios) iyr
+      if (ios==0) iyrlst = iyr + 1
       
-      if (argv=='-') then
-        uw = output_unit
-      else
-        print *,'Generating year '//argv//' calendar into '
-     &        //filename//'...'
-        filename = 'snpcal'//argv//'.txt'
-        open(newunit=uw,file=filename,status='replace',action='write')
-      endif
-      
-      
+      uw = output_unit
+
       if (iyr<1753.or.iyr>3999) then
         write(error_unit,*) 'WARNING: algorithm may be inaccurate'//
      &                      ' for year', iyr
@@ -208,7 +193,7 @@ C     ******************************************************************
 
 100   close(ur)
       close(uw)
-      print *,'DONE'
+      if (uw/= output_unit) print *,'DONE'
 
 1     FORMAT (13A6)
 2     FORMAT (11A6)

@@ -24,30 +24,18 @@ make test
 
 ## Usage
 
+The output is printed to the Terminal, so simply redirect stdout to a file to save.
+To see the calendar in your terminal, your terminal must be at least 133 columns wide.
+
 Year is optional, default is 1969. 
 To make a 2018 calendar:
 
 ```bash
-./snpcal 2018
+./snpcal 2018 > 2018.txt
 ```
 
 It seems from a cursory check that the output may be valid from year 1753 through year 3000 or more.
 
-To output to console `stdout` instead of a file, specify AFTER the year (as the second argument) `-`
-For example:
-
-```bash
-./snpcal 2018 -
-```
-
-You can thus pipe the output to other programs. 
-To see the calendar in your terminal, your terminal must be at least 132 columns wide.
-
-### Output
-
-The calendar is created in `snpcal2018.txt` (or whatever your year is).
-Be sure line wrapping is turned off in your text editor to view the calendar properly.
-The lines are 132 characters + newline long.
 
 ## Hacking
 The cartoon character writing code is all in `snppic.f`.
