@@ -37,6 +37,14 @@ To make a 2018 calendar:
 It seems from a cursory check that the output may be valid from year 1753 through year 3000 or more.
 
 
-## Hacking
-The cartoon character writing code is all in `snppic.f`.
-Simply commenting out line 230 (replacing with `230 continue`) generates just the calendar, so it's straightforward to make a new few line `snppic()` that inputs your own Text art files.
+### Custom images
+
+The second command line argument `user` will load your own images from the folder `data/pic01.txt` `data/pic02.txt` where the number is the month.
+We have found a good way to convert images to simple ASCII is 
+[jp2a](https://csl.name/jp2a/), available on Linux by `apt install jp2a` or similar.
+Then using ImageMagick:
+```bash
+convert myimg.png jpg:- | jp2a --width=132 -i - > myimg.txt
+```
+
+Once you are satisfied, put them in the `data/` folder, named as `pic01.txt` &c. to be used for the respective month.

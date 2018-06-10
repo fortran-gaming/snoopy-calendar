@@ -53,12 +53,14 @@ C     ******************************************************************
 
       real(real64) :: AMONTH (12,7,13), ANAM(22), ANUM(2,10,5),
      &          CAL(60,22)
-      integer :: NODS(12)
+      integer :: NODS(12), i, j, l, month
       integer, parameter :: iset=25
-      
+
       integer :: ur, uw, ios
       character(4) :: argv
       character(6+4+4) :: filename
+      character(4) :: usermode
+      character(4+1+3+2+4) :: monthfn
 
       OPEN(newunit=ur, FILE='snpcal.dat', STATUS='OLD', action='read')
       read(ur,1) (((AMONTH(I,J,K),K=1,13),J=1,7),I=1,12)
@@ -71,7 +73,11 @@ C     ******************************************************************
       call get_command_argument(1, argv, status=ios)
       if (ios==0) read(argv,'(I4)', iostat=ios) iyr
       if (ios==0) iyrlst = iyr + 1
-      
+
+      usermode='snp'
+      call get_command_argument(2, argv, status=ios)
+      if (ios==0) read(argv,'(A4)') usermode
+
       uw = output_unit
 
       if (iyr<1753.or.iyr>3999) then
@@ -181,7 +187,16 @@ C     ******************************************************************
 225   II=54
       ID=1
       GO TO 205
-230   CALL SNPPIC(ur, uw, iset)
+
+230   select case (usermode)
+      case ('snp')
+        CALL SNPPIC(ur, uw, iset)
+      case ('user')
+        write(monthfn,'(A8,I0.2,A4)') 'data/pic',month,'.txt'
+        call userpic(monthfn, uw)
+      case default
+        ! no picture
+      end select
 
       WRITE (uw,'(22A6)') ((CAL(I,J),J=1,22),I=1,60)
 51    CONTINUE

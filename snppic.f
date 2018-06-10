@@ -1,41 +1,61 @@
       SUBROUTINE SNPPIC(ur, uw, iset)
-C     THIS SUBROUTINE WILL ANALYZE THE INPUT DATA AND PRINT A PICTURE
-C     YOU CAN EXPECT TO GET 1 WARNING MESSAGE DURING COMPILATION
+!     THIS SUBROUTINE WILL ANALYZE THE INPUT DATA AND PRINT A PICTUREs
+      implicit none
       integer, intent(in) :: ur, uw, iset
-      integer :: ILINE(133),INUM(50),ICHR(50)
 
-      integer, parameter :: iblnk = iachar(' ')
+      integer :: INUM(50), i,  k
 
-      DO I=1,133
-        ILINE(I) = iblnk
-      enddo
+      character(133) :: line
+      character(50) :: CHR
+
+      line = repeat(' ', len(line))
+
       K=1
 
-   10 READ(ur, '(25(I2,A1))') (INUM(I),ICHR(I),I=1,ISET)
-   
+   10 READ(ur, '(25(I2,A1))') (INUM(I), CHR(I:I),I=1,ISET)
+
       DO I=1,ISET
         IF (INUM(I) .NE. -1) GOTO 100
-C     HERE WE WRITE A LINE TO THE PRINTER AND GO BUILD ANOTHER
-        DO L=K,133
-          ILINE(L)=ICHR(I)
-        enddo
-        
-        WRITE(uw,'(133A1)') (ILINE(K),K=1,133)
-        ILINE(1) = iblnk
-        DO  K=2,133
-          ILINE(K)=ICHR(I)
-        enddo
-        
+!     HERE WE WRITE A LINE TO THE PRINTER AND GO BUILD ANOTHER
+        LINE(K:len(line)) = repeat(CHR(I:I), len(line)-k+1)
+        WRITE(uw,'(A133)') line
+        LINE(1:1) = ' '
+        LINE(2:len(line)) = repeat(CHR(i:i), len(line)-1)
+
         K=1
-C error      I=I+1
+! error      I=I+1
   100   IF (INUM(I) .EQ. -2) return
-        IF (INUM(I) .EQ. 0) cycle
-        DO J=1,INUM(I)
-          ILINE(K)=ICHR(I)
-          K=K+1
-        enddo
+        IF (INUM(I) == 0 .or. inum(i) == -1) cycle
+
+        LINE(K:K+INUM(I)) = repeat(CHR(i:i), inum(i))
+        K = K+INUM(I)
+
       enddo
       GOTO 10
 
- 
+
       END SUBROUTINE SNPPIC
+
+
+      subroutine userpic(filename, uw)
+      implicit none
+      character(*), intent(in) :: filename
+      integer, intent(in) :: uw
+      integer :: u, ios
+      character(133) :: line
+
+      open(newunit=u, file=filename, status='old',
+     &           action='read', iostat=ios)
+
+      do while (ios==0)
+
+        read(u,'(A133)', iostat=ios) line
+
+        if(ios/=0) exit
+        write(uw,'(A133)') line
+
+      enddo
+
+      close(u)
+
+      end subroutine userpic
