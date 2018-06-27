@@ -56,7 +56,7 @@ C     ******************************************************************
       integer :: NODS(12), i, j, l, month
       integer, parameter :: iset=25
 
-      integer :: ur, uw, ios
+      integer :: ur, uw, ios, onlymonth
       character(4) :: argv
       character(6+4+4) :: filename
       character(4) :: usermode
@@ -71,11 +71,17 @@ C     ******************************************************************
       read(ur,4) MF,IYR,MTHLST,IYRLST,LNSW
 
       call get_command_argument(1, argv, status=ios)
-      if (ios==0) read(argv,'(I4)', iostat=ios) iyr
-      if (ios==0) iyrlst = iyr + 1
+       if (ios/=0) stop 'must specify year'
+      read(argv,'(I4)', iostat=ios) iyr
+      iyrlst = iyr + 1
+
+      call get_command_argument(2, argv, status=ios)
+       if (ios/=0) stop 'must specify month'
+      read(argv,'(I2)') onlymonth 
+      
 
       usermode='snp'
-      call get_command_argument(2, argv, status=ios)
+      call get_command_argument(3, argv, status=ios)
       if (ios==0) read(argv,'(A4)') usermode
 
       uw = output_unit
@@ -188,17 +194,20 @@ C     ******************************************************************
       ID=1
       GO TO 205
 
-230   select case (usermode)
-      case ('snp')
-        CALL SNPPIC(ur, uw, iset)
-      case ('user')
-        write(monthfn,'(A8,I0.2,A4)') 'data/pic',month,'.txt'
-        call userpic(monthfn, uw)
-      case default
-        ! no picture
-      end select
+230   continue
+      if (onlymonth == month) then
+       select case (usermode)
+        case ('snp')
+          CALL SNPPIC(ur, uw, iset)
+        case ('user')
+          write(monthfn,'(A8,I0.2,A4)') 'data/pic',month,'.txt'
+          call userpic(monthfn, uw)
+        case default
+          ! no picture
+        end select
 
-      WRITE (uw,'(22A6)') ((CAL(I,J),J=1,22),I=1,60)
+        WRITE (uw,'(22A6)') ((CAL(I,J),J=1,22),I=1,60)
+      endif
 51    CONTINUE
       IF (IYR-IYRLST) 235,100,100
 235   NODS(2)=NODS(2)-LPYRSW

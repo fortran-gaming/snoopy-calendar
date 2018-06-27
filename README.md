@@ -7,7 +7,7 @@ The classic Fortran 66 Peanuts calendar generator...with a dash of Fortran 2008!
 Modified:
 
 * uses Fortran 2008 file open() and close()
-* allows Fortran 2003 command line input of year (default 1969)
+* Fortran 2003 command line input of year/month
 * remove Fortran 66 Hollerith characters
 
 ## Build
@@ -27,11 +27,11 @@ make test
 The output is printed to the Terminal, so simply redirect stdout to a file to save.
 To see the calendar in your terminal, your terminal must be at least 133 columns wide.
 
-Year is optional, default is 1969. 
-To make a 2018 calendar:
+Specify year and month.
+To make a July 2018 calendar:
 
 ```bash
-./snpcal 2018 > 2018.txt
+./snpcal 2018 7 
 ```
 
 It seems from a cursory check that the output may be valid from year 1753 through year 3000 or more.
