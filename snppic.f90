@@ -1,7 +1,8 @@
-SUBROUTINE SNPPIC(ur, uw, iset)
+SUBROUTINE SNPPIC(ur, uw, iset, use)
 ! THIS SUBROUTINE WILL ANALYZE THE INPUT DATA AND PRINT A PICTUREs
 implicit none
 integer, intent(in) :: ur, uw, iset
+logical, intent(in) :: use
 
 integer :: INUM(50), i,  k
 
@@ -19,7 +20,7 @@ do
     IF (INUM(I) == -1) then
 !     HERE WE WRITE A LINE TO THE PRINTER AND GO BUILD ANOTHER
       LINE(K:len(line)) = repeat(CHR(I:I), len(line)-k+1)
-      WRITE(uw,'(A133)') line
+      if (use) WRITE(uw,'(A133)') line
       LINE(1:1) = ' '
       LINE(2:len(line)) = repeat(CHR(i:i), len(line)-1)
 

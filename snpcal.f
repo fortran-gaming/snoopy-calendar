@@ -195,17 +195,17 @@ C     ******************************************************************
       GO TO 205
 
 230   continue
-      if (onlymonth == month) then
-       select case (usermode)
-        case ('snp')
-          CALL SNPPIC(ur, uw, iset)
-        case ('user')
-          write(monthfn,'(A8,I0.2,A4)') 'data/pic',month,'.txt'
-          call userpic(monthfn, uw)
-        case default
-          ! no picture
-        end select
+      select case (usermode)
+      case ('snp')
+        CALL SNPPIC(ur, uw, iset, onlymonth == month)
+      case ('user')
+        write(monthfn,'(A8,I0.2,A4)') 'data/pic',month,'.txt'
+        call userpic(monthfn, uw)
+      case default
+        ! no picture
+      end select
 
+      if (onlymonth == month) then
         WRITE (uw,'(22A6)') ((CAL(I,J),J=1,22),I=1,60)
       endif
 51    CONTINUE
