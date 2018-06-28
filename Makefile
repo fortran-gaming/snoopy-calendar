@@ -6,5 +6,5 @@ clean:
 	$(RM) snpcal *.o
 
 test:
-	@./snpcal 2018 | diff --text -a - ref/snpcal2018.txt
+	@./snpcal 2018 7 | diff --text -a - ref/test.log
 	@echo OK
