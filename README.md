@@ -11,30 +11,48 @@ Modified:
 * remove Fortran 66 Hollerith characters
 
 ## Build
-Assuming any modern Fortran compiler (tested with Gfortran 4.8+, PGI 2017+, Flang 5.0 and Intel 2018+) and GNU Make:
+Assuming any modern Fortran compiler (tested with Gfortran &ge; 4.8, PGI 2017+, Flang 5.0 and Intel 2018+):
 
 ```bash
-make
+cmake ..
+
+cmake --build .
 ```
 
 test output with
 ```bash
-make test
+ctest -V
 ```
 
 ## Usage
+
+It seems from a cursory check that the output may be valid from year 1753 through year 3000 or more.
+
 
 The output is printed to the Terminal, so simply redirect stdout to a file to save.
 To see the calendar in your terminal, your terminal must be at least 133 columns wide.
 
 Specify year and month.
-To make a July 2018 calendar:
-
-```bash
+To make a July 2018 calendar, output to terminal:
+```sh
 ./snpcal 2018 7 
 ```
 
-It seems from a cursory check that the output may be valid from year 1753 through year 3000 or more.
+### Create PDF
+This procedure is specific to Linux, but may be adapted to other OS.
+
+1. install:
+   ```sh
+   apt install enscript ghostscript
+   ```
+2. for each month wanted:
+   ```sh
+   ./snpcal 2018 07 | enscript -Bh -f Courier4.7 --margins=110 -o - | ps2pdf - mycal.pdf
+   ```
+
+That creates `mycal.pdf` which should be a single page, approximately centered.
+Adjust the `enscript` command line parameters if it doesn't look right.
+
 
 
 ### Custom images

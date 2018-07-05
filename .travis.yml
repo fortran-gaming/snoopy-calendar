@@ -1,5 +1,4 @@
 language: generic
-fast_finish: true
 
 os:
   - linux
@@ -16,8 +15,8 @@ addons:
     packages: gfortran
 
 install: 
-  - make
+  - cmake --build .
 
 script:
-  - make test
+  - ctest -V
 
