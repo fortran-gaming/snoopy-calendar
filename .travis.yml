@@ -25,6 +25,7 @@ before_install:
     fi
 
 install: 
+  - cd build
   - cmake ..
   - cmake --build .
   
