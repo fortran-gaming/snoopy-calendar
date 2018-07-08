@@ -22,3 +22,8 @@ install(TARGETS snpcal
 install(FILES ${PROJECT_SOURCE_DIR}/snpcal.dat
         DESTINATION ${CMAKE_INSTALL_PREFIX}
         PERMISSIONS OWNER_READ)
+
+if(UNIX)
+  install(FILES ${PROJECT_SOURCE_DIR}/snpcal.sh
+          DESTINATION ${CMAKE_INSTALL_PREFIX})
+endif()

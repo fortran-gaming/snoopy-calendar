@@ -45,9 +45,9 @@ This procedure is specific to Linux, but may be adapted to other OS.
    ```sh
    apt install enscript ghostscript
    ```
-2. for each month wanted:
+2. for each month wanted (here, July 2018)
    ```sh
-   ./snpcal 2018 07 | enscript -Bh -f Courier4.7 --margins=110 -o - | ps2pdf - mycal.pdf
+   ./snpcal.sh 2018 7
    ```
 
 That creates `mycal.pdf` which should be a single page, approximately centered.
