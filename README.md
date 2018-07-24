@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.com/fortran-gaming/snoopy-calendar.svg?branch=master)](https://travis-ci.com/fortran-gaming/snoopy-calendar)
+[![Build status](https://ci.appveyor.com/api/projects/status/0jf73fhy9bbeuffn?svg=true)](https://ci.appveyor.com/project/scivision/snoopy-calendar)
 
 # Fortran Snoopy Calendar
 
@@ -11,7 +12,7 @@ Modified:
 * remove Fortran 66 Hollerith characters
 
 ## Build
-Assuming any modern Fortran compiler (tested with Gfortran &ge; 4.8, PGI 2017+, Flang 5.0 and Intel 2018+):
+Assuming any modern Fortran compiler (tested with Gfortran, PGI, Flang and Intel `ifort`):
 
 ```bash
 cmake ..
