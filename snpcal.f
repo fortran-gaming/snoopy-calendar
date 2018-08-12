@@ -56,7 +56,7 @@ C     ******************************************************************
       integer :: NODS(12), i, j, l, month
       integer, parameter :: iset=25
 
-      integer :: ur, uw, ios, onlymonth
+      integer :: ur, uw, ios, onlymonth, onlyyear
       character(4) :: argv
       character(6+4+4) :: filename
       character(4) :: usermode
@@ -74,6 +74,7 @@ C     ******************************************************************
        if (ios/=0) stop 'must specify year'
       read(argv,'(I4)', iostat=ios) iyr
       iyrlst = iyr + 1
+      onlyyear = iyr
 
       call get_command_argument(2, argv, status=ios)
        if (ios/=0) stop 'must specify month'
@@ -197,7 +198,8 @@ C     ******************************************************************
 230   continue
       select case (usermode)
       case ('snp')
-        CALL SNPPIC(ur, uw, iset, onlymonth == month)
+        CALL SNPPIC(ur, uw, iset, onlymonth == month .and. 
+     &                            iyr == onlyyear)
       case ('user')
         write(monthfn,'(A8,I0.2,A4)') 'data/pic',month,'.txt'
         call userpic(monthfn, uw)
@@ -205,7 +207,7 @@ C     ******************************************************************
         ! no picture
       end select
 
-      if (onlymonth == month) then
+      if (onlymonth == month .and. iyr==onlyyear) then
         WRITE (uw,'(22A6)') ((CAL(I,J),J=1,22),I=1,60)
       endif
 51    CONTINUE
