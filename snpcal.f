@@ -46,19 +46,25 @@ C     *    -4    LIST CARDS, TWO PER LINE, FORMAT 11A6/11A6            *
 C     *    -5    LIST CARDS, TWO PER LINE, FORMAT 12A6/10A6            *
 C     *                                                                *
 C     ******************************************************************
+      program snpcal
+
       use, intrinsic:: iso_fortran_env, only: output_unit, error_unit,
      &     real64
 
-      IMPLICIT REAL(real64) (A-H,O-Z)
+      use utils, only: isleapyear
+
+      implicit none
 
       real(real64) :: AMONTH (12,7,13), ANAM(22), ANUM(2,10,5),
-     &          CAL(60,22)
+     &  CAL(60,22), alin1, alin2, alin3, alin4, blank, one
       integer :: NODS(12), i, j, l, month
       integer, parameter :: iset=25
 
-      integer :: ur, uw, ios, onlymonth, onlyyear
+      integer :: ur, uw, ios, onlymonth, onlyyear, id, iday, idow, ii,
+     &  iy1, iy2, iy3, iy4, iyr, iyrlst, jm, k, lnsw, lpyrsw, lstday,
+     &  mf, ml, mthlst, n, numb
       character(4) :: argv
-      character(6+4+4) :: filename
+
       character(4) :: usermode
       character(4+1+3+2+4) :: monthfn
 
@@ -71,15 +77,15 @@ C     ******************************************************************
       read(ur,4) MF,IYR,MTHLST,IYRLST,LNSW
 
       call get_command_argument(1, argv, status=ios)
-       if (ios/=0) stop 'must specify year'
+       if (ios/=0) stop 'must specify year and month e.g. 2019 7'
       read(argv,'(I4)', iostat=ios) iyr
       iyrlst = iyr + 1
       onlyyear = iyr
 
       call get_command_argument(2, argv, status=ios)
-       if (ios/=0) stop 'must specify month'
-      read(argv,'(I2)') onlymonth 
-      
+       if (ios/=0) stop 'must specify year and month e.g. 2019 7'
+      read(argv,'(I2)') onlymonth
+
 
       usermode='snp'
       call get_command_argument(3, argv, status=ios)
@@ -133,12 +139,10 @@ C     ******************************************************************
       CAL(J+1,2)=ANUM(2,IY2+1,J)
       CAL(J+1,21)=ANUM(2,IY3+1,J)
 72    CAL(J+3,22)=ANUM(2,IY4+1,J)
-      LPYRSW=0
-      IF (IYR-4*(IYR/4)) 90,75,90
-75    IF (IYR-100*(IYR/100)) 85,80,85
-80    IF (IYR-400*(IYR/400)) 90,85,90
-85    LPYRSW=1
-90    NODS(2)=NODS(2)+LPYRSW
+
+      LPYRSW = isleapyear(iyr)
+
+      NODS(2)=NODS(2)+LPYRSW
       IF (MF-1) 100,110,95
 95    MF=MF-1
       DO 105 MONTH=1,MF
@@ -198,7 +202,7 @@ C     ******************************************************************
 230   continue
       select case (usermode)
       case ('snp')
-        CALL SNPPIC(ur, uw, iset, onlymonth == month .and. 
+        CALL SNPPIC(ur, uw, iset, onlymonth == month .and.
      &                            iyr == onlyyear)
       case ('user')
         write(monthfn,'(A8,I0.2,A4)') 'data/pic',month,'.txt'
@@ -219,7 +223,7 @@ C     ******************************************************************
 
 100   close(ur)
       close(uw)
-      if (uw/= output_unit) print *,'DONE'
+      if (uw /= output_unit) print *,'DONE'
 
 1     FORMAT (13A6)
 2     FORMAT (11A6)
@@ -227,3 +231,4 @@ C     ******************************************************************
 4     FORMAT (12I6)
 
       END program
+

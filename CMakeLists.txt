@@ -4,7 +4,13 @@ enable_testing()
 
 add_compile_options(-g)
 
-add_executable(snpcal snppic.f90 snpcal.f)
+if(CMAKE_Fortran_COMPILER_ID STREQUAL GNU)
+  add_compile_options(-Wall -Wextra -fimplicit-none -fcheck=all)
+elseif(CMAKE_Fortran_COMPILER_ID STREQUAL Intel)
+  add_compile_options(-check all -implicitnone)
+endif()
+
+add_executable(snpcal snppic.f90 snpcal.f utils.f90)
 if(UNIX)
   add_test(NAME Calendar COMMAND bash -c "./snpcal 2018 7 | diff --text -a - ${PROJECT_SOURCE_DIR}/ref/test.log")
 endif()
@@ -18,7 +24,7 @@ endif()
 
 install(TARGETS snpcal
         RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX})
-        
+
 install(FILES ${PROJECT_SOURCE_DIR}/snpcal.dat
         DESTINATION ${CMAKE_INSTALL_PREFIX}
         PERMISSIONS OWNER_READ)
