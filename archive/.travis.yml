@@ -1,4 +1,4 @@
-language: generic
+language: minimal
 group: travis_latest
 
 git:
@@ -30,4 +30,3 @@ install:
 - cmake --build .
 
 script: ctest --output-on-failure
-

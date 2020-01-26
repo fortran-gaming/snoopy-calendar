@@ -1,5 +1,6 @@
-project('snpcal', 'fortran', default_options : ['default_library=static'])
+project('snpcal', 'fortran', default_options: ['warning_level=3'])
 
-executable('snpcal', 'snppic.f90', 'snpcal.f', 'utils.f90')
+executable('snpcal', 'snpcal.f',
+  install: true)
 
 configure_file(input : 'snpcal.dat', output : 'snpcal.dat', copy : true)
