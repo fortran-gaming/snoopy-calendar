@@ -7,7 +7,7 @@ endif()
 project(snpcal
 LANGUAGES Fortran)
 
-enable_testing()
+include(CTest)
 
 if(CMAKE_Fortran_COMPILER_ID STREQUAL GNU)
   add_compile_options(-std=legacy -Wall -Wextra -fimplicit-none)
