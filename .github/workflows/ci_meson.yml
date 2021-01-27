@@ -19,7 +19,4 @@ jobs:
     - run: pip install meson ninja
 
     - run: meson setup build
-      env:
-        FC: gfortran-9
-
     - run: meson test -C build -v

@@ -4,8 +4,7 @@ if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE "Release" CACHE STRING "default build type")
 endif()
 
-project(snpcal
-LANGUAGES Fortran)
+project(snpcal LANGUAGES Fortran)
 
 include(CTest)
 
@@ -16,9 +15,10 @@ elseif(CMAKE_Fortran_COMPILER_ID STREQUAL Intel)
 endif()
 
 add_executable(snpcal snpcal.f)
-if(UNIX)
+find_program(BASH NAMES bash)
+if(BASH)
   add_test(NAME Calendar
-    COMMAND bash -c "./snpcal 2018 7 | diff --text -a - ${PROJECT_SOURCE_DIR}/ref/test.log")
+    COMMAND ${BASH} -c "./snpcal 2018 7 | diff --text -a - ${PROJECT_SOURCE_DIR}/ref/test.log")
 endif()
 
 configure_file(snpcal.dat ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
