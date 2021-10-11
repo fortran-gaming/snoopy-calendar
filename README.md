@@ -16,15 +16,15 @@ Modified:
 Assuming any modern Fortran compiler (tested with Gfortran, PGI, Flang and Intel `ifort`):
 
 ```sh
-cmake ..
+cmake -B build
 
-cmake --build .
+cmake --build build
 ```
 
 test output with
 
 ```sh
-ctest -V
+ctest --test-dir build
 ```
 
 ## Usage

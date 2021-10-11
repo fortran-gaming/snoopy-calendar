@@ -1,5 +1,8 @@
 name: ci_cmake
 
+env:
+  CMAKE_BUILD_TYPE: Release
+
 on:
   push:
     paths:
@@ -16,8 +19,7 @@ jobs:
     - run: cmake -B build -G "MinGW Makefiles"
     - run: cmake --build build --parallel
 
-    - run: ctest -V
-      working-directory: build
+    - run: ctest --test-dir build
 
   linux:
     runs-on: ubuntu-latest
@@ -27,5 +29,4 @@ jobs:
     - run: cmake -B build
     - run: cmake --build build --parallel
 
-    - run: ctest -V
-      working-directory: build
+    - run: ctest --test-dir build

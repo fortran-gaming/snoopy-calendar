@@ -1,10 +1,7 @@
-cmake_minimum_required (VERSION 3.7)
+cmake_minimum_required (VERSION 3.14...3.21)
 
-if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE "Release" CACHE STRING "default build type")
-endif()
-
-project(snpcal LANGUAGES Fortran)
+project(snpcal
+LANGUAGES Fortran)
 
 include(CTest)
 
@@ -25,8 +22,7 @@ configure_file(snpcal.dat ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
 
 #--- install
 
-install(TARGETS snpcal
-        RUNTIME DESTINATION bin)
+install(TARGETS snpcal TYPE RUNTIME)
 
 install(FILES ${snpcal_SOURCE_DIR}/snpcal.dat
         DESTINATION bin
