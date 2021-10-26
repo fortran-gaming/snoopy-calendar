@@ -1,22 +1,24 @@
-cmake_minimum_required (VERSION 3.14...3.21)
+cmake_minimum_required (VERSION 3.14...3.22)
 
 project(snpcal
 LANGUAGES Fortran)
 
-include(CTest)
+enable_testing()
 
-if(CMAKE_Fortran_COMPILER_ID STREQUAL GNU)
-  add_compile_options(-std=legacy -Wall -Wextra -fimplicit-none)
-elseif(CMAKE_Fortran_COMPILER_ID STREQUAL Intel)
-  add_compile_options(-warn)
-endif()
+add_compile_options(
+"$<$<Fortran_COMPILER_ID:GNU>:-std=legacy;-Wall;-Wextra;-fimplicit-none>"
+"$<$<Fortran_COMPILER_ID:Intel,IntelLLVM>:-warn>"
+)
 
 add_executable(snpcal snpcal.f)
-find_program(BASH NAMES bash)
-if(BASH)
-  add_test(NAME Calendar
-    COMMAND ${BASH} -c "./snpcal 2018 7 | diff --text -a - ${PROJECT_SOURCE_DIR}/ref/test.log")
-endif()
+
+add_test(NAME Calendar
+COMMAND sh -c "$<TARGET_FILE:snpcal> 2018 7 | diff --text -a - ${PROJECT_SOURCE_DIR}/ref/test.log"
+)
+set_tests_properties(Calendar PROPERTIES
+DISABLED $<NOT:$<BOOL:${UNIX}>>
+TIMEOUT 10
+)
 
 configure_file(snpcal.dat ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
 
@@ -25,9 +27,12 @@ configure_file(snpcal.dat ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
 install(TARGETS snpcal TYPE RUNTIME)
 
 install(FILES ${snpcal_SOURCE_DIR}/snpcal.dat
-        DESTINATION bin
-        PERMISSIONS OWNER_READ)
+TYPE BIN
+PERMISSIONS OWNER_READ
+)
 
 if(UNIX)
-  install(FILES ${snpcal_SOURCE_DIR}/snpcal.sh DESTINATION bin)
+  install(FILES ${snpcal_SOURCE_DIR}/snpcal.sh
+  TYPE BIN
+  )
 endif()
