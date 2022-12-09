@@ -118,11 +118,13 @@ C     ******************************************************************
       endif
       IDOW=(IYR-1751)+(IYR-1753)/4-(IYR-1701)/100+(IYR-1601)/400
       IDOW=IDOW-7*((IDOW-1)/7)
-55    IF (IYR-IYRLST) 60,65,100
-60    ML=12
-      GO TO 70
-65    ML=MTHLST
-70    IY1=IYR/1000
+55    IF (IYR-IYRLST > 0) call done(ur, uw)
+      if (IYR-IYRLST < 0) then
+        ML=12
+      else
+        ML=MTHLST
+      endif
+      IY1=IYR/1000
       NUMB=IYR-1000*IY1
       IY2=NUMB/100
       NUMB=NUMB-100*IY2
@@ -138,8 +140,9 @@ C     ******************************************************************
       LPYRSW = isleapyear(iyr)
 
       NODS(2)=NODS(2)+LPYRSW
-      IF (MF-1) 100,110,95
-95    MF=MF-1
+      IF (MF-1 < 0) call done(ur, uw)
+      if (MF-1 == 0) goto 110
+      MF=MF-1
       DO 105 MONTH=1,MF
 105   IDOW=IDOW+NODS(MONTH)
       IDOW=IDOW-7*((IDOW-1)/7)
@@ -198,15 +201,11 @@ C     ******************************************************************
         WRITE (uw,'(22A6)') ((CAL(I,J),J=1,22),I=1,60)
       endif
 51    CONTINUE
-      IF (IYR-IYRLST) 235,100,100
-235   NODS(2)=NODS(2)-LPYRSW
+      IF (IYR-IYRLST >= 0) call done(ur, uw)
+      NODS(2)=NODS(2)-LPYRSW
       IYR=IYR+1
       MF=1
       GO TO 55
-
-100   close(ur)
-      close(uw)
-      if (uw /= output_unit) print *,'DONE'
 
 1     FORMAT (13A6)
 2     FORMAT (11A6)
@@ -214,6 +213,22 @@ C     ******************************************************************
 4     FORMAT (12I6)
 
       contains
+
+
+      subroutine done(ur, uw)
+      integer, intent(in) :: ur, uw
+
+      close(ur)
+
+      if (uw /= output_unit) then
+        close(uw)
+        print *,'DONE'
+      endif
+
+      stop
+
+
+      end subroutine done
 
       elemental integer function isleapyear(year)
 
