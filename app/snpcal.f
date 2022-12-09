@@ -102,17 +102,19 @@ C     ******************************************************************
       CAL(11,:)=ANAM(:)
       IF (LNSW /= 0) then
         CAL(20:60:8, :) = ALIN2
-        DO 140 J=4,19,3
-        I=13
-127     DO 130 L=1,7
-        CAL(I,J)=ALIN1
-130     I=I+1
-        IF (I-55) 135,135,140
-135     CAL(I,J)=ALIN3
-        I=I+1
-        GO TO 127
-140     CONTINUE
-        CAL(20:60:8,1) = ALIN4
+        DO J=4,19,3
+          I=13
+127       DO L=1,7
+            CAL(I,J)=ALIN1
+            I=I+1
+          enddo
+          IF (I-55 <= 0) then
+            CAL(I,J) = ALIN3
+            I=I+1
+            GO TO 127
+          endif
+        enddo
+        CAL(20:60:8, 1) = ALIN4
       endif
       IDOW=(IYR-1751)+(IYR-1753)/4-(IYR-1701)/100+(IYR-1601)/400
       IDOW=IDOW-7*((IDOW-1)/7)
