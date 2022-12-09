@@ -131,23 +131,22 @@ C     ******************************************************************
       IY3=NUMB/10
       NUMB=NUMB-10*IY3
       IY4=NUMB
-      DO 72 J=1,5
-      CAL(J+3,1)=ANUM(2,IY1+1,J)
-      CAL(J+1,2)=ANUM(2,IY2+1,J)
-      CAL(J+1,21)=ANUM(2,IY3+1,J)
-72    CAL(J+3,22)=ANUM(2,IY4+1,J)
+      CAL(4:8,1)=ANUM(2,IY1+1, :)
+      CAL(2:6,2)=ANUM(2,IY2+1, :)
+      CAL(2:6,21)=ANUM(2,IY3+1, :)
+      CAL(4:8,22)=ANUM(2,IY4+1, :)
 
       LPYRSW = isleapyear(iyr)
 
       NODS(2)=NODS(2)+LPYRSW
       IF (MF-1 < 0) call done(ur, uw)
-      if (MF-1 == 0) goto 110
-      MF=MF-1
-      DO 105 MONTH=1,MF
-105   IDOW=IDOW+NODS(MONTH)
-      IDOW=IDOW-7*((IDOW-1)/7)
-      MF=MF+1
-110   DO 51 MONTH=MF,ML
+      if (MF-1 > 0) then
+        MF=MF-1
+        IDOW=IDOW + sum(NODS(1:MF))
+        IDOW=IDOW-7*((IDOW-1)/7)
+        MF=MF+1
+      endif
+      DO 51 MONTH=MF,ML
       LSTDAY=NODS(MONTH)
       CAL(1:7, 5:17) = AMONTH(MONTH, 1:7, 1:13)
       IF (IDOW-1 > 0) then
@@ -226,9 +225,8 @@ C     ******************************************************************
       endif
 
       stop
-
-
       end subroutine done
+
 
       elemental integer function isleapyear(year)
 
@@ -247,9 +245,9 @@ C     ******************************************************************
 
       end function isleapyear
 
+
       SUBROUTINE SNPPIC(ur, uw, iset, use)
       ! THIS SUBROUTINE WILL ANALYZE THE INPUT DATA AND PRINT A PICTUREs
-      implicit none
       integer, intent(in) :: ur, uw, iset
       logical, intent(in) :: use
 
@@ -289,7 +287,6 @@ C     ******************************************************************
 
 
       subroutine userpic(filename, uw)
-      implicit none
       character(*), intent(in) :: filename
       integer, intent(in) :: uw
       integer :: u, ios
