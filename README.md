@@ -1,7 +1,6 @@
 # Fortran Snoopy Calendar
 
 [![Actions Status](https://github.com/fortran-gaming/snoopy-calendar/workflows/ci_cmake/badge.svg)](https://github.com/fortran-gaming/snoopy-calendar/actions)
-[![Actions Status](https://github.com/fortran-gaming/snoopy-calendar/workflows/ci_meson/badge.svg)](https://github.com/fortran-gaming/snoopy-calendar/actions)
 
 The classic Fortran 66 Peanuts calendar generator...with a dash of Fortran 2008, in a single .f file.
 
@@ -12,8 +11,6 @@ Modified:
 * remove Fortran 66 Hollerith characters
 
 ## Build
-
-Assuming any modern Fortran compiler (tested with Gfortran, PGI, Flang and Intel `ifort`):
 
 ```sh
 cmake -B build

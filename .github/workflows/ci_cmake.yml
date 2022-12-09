@@ -1,33 +1,18 @@
 name: ci_cmake
 
-env:
-  CMAKE_BUILD_TYPE: Release
-
 on:
   push:
     paths:
-      - "**/*.f"
+      - "**.f"
+      - "**/CMakeLists.txt"
+      - "**.cmake"
       - ".github/workflows/ci_cmake.yml"
 
 jobs:
 
-  windows:
-    runs-on: windows-latest
-    steps:
-    - uses: actions/checkout@v2
-
-    - run: cmake -B build -G "MinGW Makefiles"
-    - run: cmake --build build --parallel
-
-    - run: ctest --test-dir build -V
-
-
   linux:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
-    - run: cmake -B build
-    - run: cmake --build build --parallel
-
-    - run: ctest --test-dir build -V
+    - run: cmake --workflow --preset default
