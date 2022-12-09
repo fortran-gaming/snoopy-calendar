@@ -159,19 +159,20 @@ C     ******************************************************************
       endif
       IDAY=1
       II=14
-25    J=3*IDOW-1
-      N=IDAY/10+1
-      CAL(II:II+4, J) = ANUM(1,N,:)
-      N=IDAY-10*N+11
-      J=J+1
-      CAL(II:II+4, J) = ANUM(2,N,:)
-      IDOW=IDOW+1
-      IF (IDOW-7 > 0) then
-        IDOW=1
-        II=II+8
-      endif
-      IDAY=IDAY+1
-      IF (IDAY-LSTDAY <= 0) goto 25
+      do while (IDAY-LSTDAY <= 0)
+        J=3*IDOW-1
+        N=IDAY/10+1
+        CAL(II:II+4, J) = ANUM(1,N,:)
+        N=IDAY-10*N+11
+        J=J+1
+        CAL(II:II+4, J) = ANUM(2,N,:)
+        IDOW=IDOW+1
+        IF (IDOW-7 > 0) then
+          IDOW=1
+          II=II+8
+        endif
+        IDAY=IDAY+1
+      end do
       ID=IDOW
 205   J=3*ID-1
       CAL(II:II+4, J:J+1) = BLANK

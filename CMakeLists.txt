@@ -11,7 +11,7 @@ if(NOT EXISTS ${PROJECT_BINARY_DIR}/.gitignore)
 endif()
 
 if(CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
-  add_compile_options(-std=legacy -Wall -Wextra -fimplicit-none
+  add_compile_options(-Wall -Wextra -fimplicit-none
   "$<$<CONFIG:Debug>:-fcheck=all>"
   )
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^Intel")
