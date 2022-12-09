@@ -97,16 +97,13 @@ C     ******************************************************************
       endif
 
 
-      DO 10 I=1,60
-      DO 10 J=1,22
-10    CAL(I,J)= BLANK
+      CAL(:,:) = BLANK
       CAL(1,1)= ONE
-      DO 20 J=1,22
-20    CAL(11,J)=ANAM(J)
+      CAL(11,:)=ANAM(:)
       IF (LNSW) 122,142,122
-122   DO 125 I=20,60,8
-      DO 125 J=1,22
-125   CAL(I,J)=ALIN2
+122   DO I=20,60,8
+        CAL(I,:) = ALIN2
+      end do
       DO 140 J=4,19,3
       I=13
 127   DO 130 L=1,7
@@ -177,10 +174,11 @@ C     ******************************************************************
       CAL(I,J)=ANUM(2,N,K)
 35    I=I+1
       IDOW=IDOW+1
-      IF (IDOW-7) 45,45,40
-40    IDOW=1
-      II=II+8
-45    IDAY=IDAY+1
+      IF (IDOW-7 > 0) then
+        IDOW=1
+        II=II+8
+      endif
+      IDAY=IDAY+1
       IF (IDAY-LSTDAY) 25,25,50
 50    ID=IDOW
 205   I=II
@@ -189,15 +187,16 @@ C     ******************************************************************
       CAL(I,J)= BLANK
       CAL(I,J+1)= BLANK
 210   I=I+1
-      IF (ID-7) 215,220,220
-215   ID=ID+1
-      GO TO 205
-220   IF (II-54) 225,230,230
-225   II=54
-      ID=1
-      GO TO 205
+      IF (ID-7 < 0) then
+        ID=ID+1
+        GO TO 205
+      endif
+      IF (II-54 < 0) then
+        II=54
+        ID=1
+        GO TO 205
+      endif
 
-230   continue
       select case (usermode)
       case ('snp')
         CALL SNPPIC(ur, uw, iset, onlymonth == month .and.

@@ -10,10 +10,13 @@ if(NOT EXISTS ${PROJECT_BINARY_DIR}/.gitignore)
   file(WRITE ${PROJECT_BINARY_DIR}/.gitignore "*")
 endif()
 
-add_compile_options(
-"$<$<Fortran_COMPILER_ID:GNU>:-std=legacy;-Wall;-Wextra;-fimplicit-none>"
-"$<$<Fortran_COMPILER_ID:Intel,IntelLLVM>:-warn>"
-)
+if(CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
+  add_compile_options(-std=legacy -Wall -Wextra -fimplicit-none
+  "$<$<CONFIG:Debug>:-fcheck=all>"
+  )
+elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^Intel")
+  add_compile_options(warn)
+endif()
 
 add_executable(snpcal app/snpcal.f)
 
