@@ -58,7 +58,7 @@ C     ******************************************************************
       integer :: NODS(12), i, j, l, month
       integer, parameter :: iset=25
 
-      integer :: ur, uw, ios, onlymonth, onlyyear, id, iday, idow, ii,
+      integer :: ur, uw, ios, onlymonth, onlyyear, iday, idow, ii,
      &  iy1, iy2, iy3, iy4, iyr, iyrlst, k, lnsw, lpyrsw, lstday,
      &  mf, ml, mthlst, n, numb
       character(4) :: argv
@@ -146,7 +146,28 @@ C     ******************************************************************
         IDOW=IDOW-7*((IDOW-1)/7)
         MF=MF+1
       endif
-      DO 51 MONTH=MF,ML
+      DO MONTH=MF,ML
+        call each_month(month)
+      end do
+      IF (IYR-IYRLST >= 0) call done(ur, uw)
+      NODS(2)=NODS(2)-LPYRSW
+      IYR=IYR+1
+      MF=1
+      GO TO 55
+
+1     FORMAT (13A6)
+2     FORMAT (11A6)
+3     FORMAT (10A6)
+4     FORMAT (12I6)
+
+      contains
+
+
+      subroutine each_month(month)
+
+      integer, intent(in) :: month
+      integer :: id
+
       LSTDAY=NODS(MONTH)
       CAL(1:7, 5:17) = AMONTH(MONTH, 1:7, 1:13)
       IF (IDOW-1 > 0) then
@@ -199,19 +220,9 @@ C     ******************************************************************
       if (onlymonth == month .and. iyr==onlyyear) then
         WRITE (uw,'(22A6)') ((CAL(I,J),J=1,22),I=1,60)
       endif
-51    CONTINUE
-      IF (IYR-IYRLST >= 0) call done(ur, uw)
-      NODS(2)=NODS(2)-LPYRSW
-      IYR=IYR+1
-      MF=1
-      GO TO 55
 
-1     FORMAT (13A6)
-2     FORMAT (11A6)
-3     FORMAT (10A6)
-4     FORMAT (12I6)
 
-      contains
+      end subroutine each_month
 
 
       subroutine done(ur, uw)
