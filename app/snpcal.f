@@ -118,42 +118,44 @@ C     ******************************************************************
       endif
       IDOW=(IYR-1751)+(IYR-1753)/4-(IYR-1701)/100+(IYR-1601)/400
       IDOW=IDOW-7*((IDOW-1)/7)
-55    IF (IYR-IYRLST > 0) call done(ur, uw)
-      if (IYR-IYRLST < 0) then
-        ML=12
-      else
-        ML=MTHLST
-      endif
-      IY1=IYR/1000
-      NUMB=IYR-1000*IY1
-      IY2=NUMB/100
-      NUMB=NUMB-100*IY2
-      IY3=NUMB/10
-      NUMB=NUMB-10*IY3
-      IY4=NUMB
-      CAL(4:8,1)=ANUM(2,IY1+1, :)
-      CAL(2:6,2)=ANUM(2,IY2+1, :)
-      CAL(2:6,21)=ANUM(2,IY3+1, :)
-      CAL(4:8,22)=ANUM(2,IY4+1, :)
+      do while (IYR-IYRLST <= 0)
+        if (IYR-IYRLST < 0) then
+          ML=12
+        else
+          ML=MTHLST
+        endif
+        IY1=IYR/1000
+        NUMB=IYR-1000*IY1
+        IY2=NUMB/100
+        NUMB=NUMB-100*IY2
+        IY3=NUMB/10
+        NUMB=NUMB-10*IY3
+        IY4=NUMB
+        CAL(4:8,1)=ANUM(2,IY1+1, :)
+        CAL(2:6,2)=ANUM(2,IY2+1, :)
+        CAL(2:6,21)=ANUM(2,IY3+1, :)
+        CAL(4:8,22)=ANUM(2,IY4+1, :)
 
-      LPYRSW = isleapyear(iyr)
+        LPYRSW = isleapyear(iyr)
 
-      NODS(2)=NODS(2)+LPYRSW
-      IF (MF-1 < 0) call done(ur, uw)
-      if (MF-1 > 0) then
-        MF=MF-1
-        IDOW=IDOW + sum(NODS(1:MF))
-        IDOW=IDOW-7*((IDOW-1)/7)
-        MF=MF+1
-      endif
-      DO MONTH=MF,ML
-        call each_month(month)
+        NODS(2)=NODS(2)+LPYRSW
+        IF (MF-1 < 0) exit
+        if (MF-1 > 0) then
+          MF=MF-1
+          IDOW=IDOW + sum(NODS(1:MF))
+          IDOW=IDOW-7*((IDOW-1)/7)
+          MF=MF+1
+        endif
+        DO MONTH=MF,ML
+          call each_month(month)
+        end do
+        IF (IYR-IYRLST >= 0) exit
+        NODS(2)=NODS(2)-LPYRSW
+        IYR=IYR+1
+        MF=1
       end do
-      IF (IYR-IYRLST >= 0) call done(ur, uw)
-      NODS(2)=NODS(2)-LPYRSW
-      IYR=IYR+1
-      MF=1
-      GO TO 55
+
+      call done(ur, uw)
 
 1     FORMAT (13A6)
 2     FORMAT (11A6)
