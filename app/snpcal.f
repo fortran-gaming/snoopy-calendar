@@ -59,7 +59,7 @@ C     ******************************************************************
       integer, parameter :: iset=25
 
       integer :: ur, uw, ios, onlymonth, onlyyear, id, iday, idow, ii,
-     &  iy1, iy2, iy3, iy4, iyr, iyrlst, jm, k, lnsw, lpyrsw, lstday,
+     &  iy1, iy2, iy3, iy4, iyr, iyrlst, k, lnsw, lpyrsw, lstday,
      &  mf, ml, mthlst, n, numb
       character(4) :: argv
 
@@ -100,23 +100,21 @@ C     ******************************************************************
       CAL(:,:) = BLANK
       CAL(1,1)= ONE
       CAL(11,:)=ANAM(:)
-      IF (LNSW) 122,142,122
-122   DO I=20,60,8
-        CAL(I,:) = ALIN2
-      end do
-      DO 140 J=4,19,3
-      I=13
-127   DO 130 L=1,7
-      CAL(I,J)=ALIN1
-130   I=I+1
-      IF (I-55) 135,135,140
-135   CAL(I,J)=ALIN3
-      I=I+1
-      GO TO 127
-140   CONTINUE
-      DO 141 I=20,60,8
-141   CAL(I,1)=ALIN4
-142   IDOW=(IYR-1751)+(IYR-1753)/4-(IYR-1701)/100+(IYR-1601)/400
+      IF (LNSW /= 0) then
+        CAL(20:60:8, :) = ALIN2
+        DO 140 J=4,19,3
+        I=13
+127     DO 130 L=1,7
+        CAL(I,J)=ALIN1
+130     I=I+1
+        IF (I-55) 135,135,140
+135     CAL(I,J)=ALIN3
+        I=I+1
+        GO TO 127
+140     CONTINUE
+        CAL(20:60:8,1) = ALIN4
+      endif
+      IDOW=(IYR-1751)+(IYR-1753)/4-(IYR-1701)/100+(IYR-1601)/400
       IDOW=IDOW-7*((IDOW-1)/7)
 55    IF (IYR-IYRLST) 60,65,100
 60    ML=12
@@ -146,47 +144,33 @@ C     ******************************************************************
       MF=MF+1
 110   DO 51 MONTH=MF,ML
       LSTDAY=NODS(MONTH)
-      DO 115 I=1,7
-      DO 115 JM=1,13
-      J=JM+4
-115   CAL(I,J)=AMONTH(MONTH,I,JM)
-      IF (IDOW-1) 160,160,120
-120   ID=IDOW-1
-      J=2
-      DO 155 K=1,ID
-      DO 150 I=14,18
-      CAL (I,J)= BLANK
-150   CAL(I,J+1)= BLANK
-      J=J+3
-155   CONTINUE
-160   IDAY=1
+      CAL(1:7, 5:17) = AMONTH(MONTH, 1:7, 1:13)
+      IF (IDOW-1 > 0) then
+        ID=IDOW-1
+        J=2
+        DO K=1,ID
+          CAL(14:18,J:J+1)= BLANK
+          J=J+3
+        enddo
+      endif
+      IDAY=1
       II=14
 25    J=3*IDOW-1
       N=IDAY/10+1
-      I=II
-      DO 30 K=1,5
-      CAL(I,J)=ANUM(1,N,K)
-30    I=I+1
+      CAL(II:II+4, J) = ANUM(1,N,:)
       N=IDAY-10*N+11
       J=J+1
-      I=II
-      DO 35 K=1,5
-      CAL(I,J)=ANUM(2,N,K)
-35    I=I+1
+      CAL(II:II+4, J) = ANUM(2,N,:)
       IDOW=IDOW+1
       IF (IDOW-7 > 0) then
         IDOW=1
         II=II+8
       endif
       IDAY=IDAY+1
-      IF (IDAY-LSTDAY) 25,25,50
-50    ID=IDOW
-205   I=II
-      J=3*ID-1
-      DO 210 K=1,5
-      CAL(I,J)= BLANK
-      CAL(I,J+1)= BLANK
-210   I=I+1
+      IF (IDAY-LSTDAY <= 0) goto 25
+      ID=IDOW
+205   J=3*ID-1
+      CAL(II:II+4, J:J+1) = BLANK
       IF (ID-7 < 0) then
         ID=ID+1
         GO TO 205
