@@ -17,10 +17,12 @@ add_compile_options(
 
 add_executable(snpcal app/snpcal.f)
 
-add_test(NAME Calendar
-COMMAND sh -c "$<TARGET_FILE:snpcal> 2018 7 | diff --text -a - ${PROJECT_SOURCE_DIR}/ref/test.log"
+add_test(NAME diff
+COMMAND ${CMAKE_COMMAND}
+  -Dexe:FILEPATH=$<TARGET_FILE:snpcal>
+  -Dref:FILEPATH=${PROJECT_SOURCE_DIR}/ref/test.log
+  -P ${CMAKE_CURRENT_SOURCE_DIR}/tests/diff.cmake
 )
-set_property(TEST Calendar PROPERTY DISABLED $<NOT:$<BOOL:${UNIX}>>)
 
 configure_file(snpcal.dat ${CMAKE_CURRENT_BINARY_DIR} COPYONLY)
 

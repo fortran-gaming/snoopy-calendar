@@ -1,3 +1,7 @@
-name = "SnoopyCalendar"
+name = "snpcal"
 description = "Generate monthly calendars"
 version = "1.0.0"
+
+[[ executable ]]
+name="snpcal"
+main="snpcal.f"
