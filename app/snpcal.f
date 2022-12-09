@@ -174,17 +174,16 @@ C     ******************************************************************
         IDAY=IDAY+1
       end do
       ID=IDOW
-205   J=3*ID-1
-      CAL(II:II+4, J:J+1) = BLANK
-      IF (ID-7 < 0) then
-        ID=ID+1
-        GO TO 205
-      endif
-      IF (II-54 < 0) then
+      do while (II-54 < 0)
+        J=3*ID-1
+        CAL(II:II+4, J:J+1) = BLANK
+        IF (ID-7 < 0) then
+          ID=ID+1
+          cycle
+        endif
         II=54
         ID=1
-        GO TO 205
-      endif
+      enddo
 
       select case (usermode)
       case ('snp')
@@ -275,7 +274,7 @@ C     ******************************************************************
             K=1
           endif
 
-          IF (INUM(I) .EQ. -2) return
+          IF (INUM(I) == -2) return
           IF (INUM(I) == 0 .or. inum(i) == -1) cycle
 
           LINE(K:K+INUM(I)) = repeat(CHR(i:i), inum(i))
