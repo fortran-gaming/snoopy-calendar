@@ -1,14 +1,15 @@
 cmake_minimum_required(VERSION 3.14)
 
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
+  message(FATAL_ERROR "Please use out-of-source build
+  cmake -Bbuild")
+endif()
+
 project(snpcal
 LANGUAGES Fortran)
 
 enable_testing()
 
-# --- auto-ignore build directory
-if(NOT EXISTS ${PROJECT_BINARY_DIR}/.gitignore)
-  file(WRITE ${PROJECT_BINARY_DIR}/.gitignore "*")
-endif()
 
 if(CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
   add_compile_options(-Wall -Wextra -fimplicit-none
@@ -40,3 +41,6 @@ PERMISSIONS OWNER_READ
 if(UNIX)
   install(FILES snpcal.sh TYPE BIN)
 endif()
+
+# --- auto-ignore build directory
+file(GENERATE OUTPUT .gitignore CONTENT "*")

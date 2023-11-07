@@ -21,7 +21,7 @@ cmake --build build
 test output with
 
 ```sh
-ctest --test-dir build
+ctest --test-dir build -V
 ```
 
 ## Usage
