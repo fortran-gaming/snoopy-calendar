@@ -5,21 +5,19 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
   cmake -Bbuild")
 endif()
 
-project(snpcal
-LANGUAGES Fortran)
+project(snpcal LANGUAGES Fortran)
 
 enable_testing()
 
 
 if(CMAKE_Fortran_COMPILER_ID STREQUAL "GNU")
-  add_compile_options(-Wall -Wextra -fimplicit-none
-  "$<$<CONFIG:Debug>:-fcheck=all>"
-  )
+  #add_compile_options(-Wall -Wextra -fimplicit-none "$<$<CONFIG:Debug>:-fcheck=all>")
+  add_compile_options(-std=legacy -Werror=line-truncation)
 elseif(CMAKE_Fortran_COMPILER_ID MATCHES "^Intel")
-  add_compile_options(warn)
+  # add_compile_options(warn)
 endif()
 
-add_executable(snpcal app/snpcal.f)
+add_executable(snpcal app/snpcal.for )
 
 add_test(NAME diff
 COMMAND ${CMAKE_COMMAND}
