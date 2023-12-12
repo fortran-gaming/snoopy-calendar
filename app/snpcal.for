@@ -47,6 +47,8 @@ C     *    -4    LIST CARDS, TWO PER LINE, FORMAT 11A6/11A6            *
 C     *    -5    LIST CARDS, TWO PER LINE, FORMAT 12A6/10A6            *
 C     *                                                                *
 C     ******************************************************************
+
+      use, intrinsic :: iso_fortran_env, only : output_unit
       IMPLICIT REAL*8 (A-H,O-Z)
       DIMENSION AMONTH (12,7,13), ANAM(22), ANUM(2,10,5), NODS(12),
      1          CAL(60,22)
@@ -58,7 +60,7 @@ C      OPEN (UNIT=7,FILE='SNPCAL.OUT',STATUS='UNKNOWN')
 C     CLOSE (UNIT=7,DISPOSE='DELETE')
 C      CLOSE (UNIT=7,DISPOSE='DELETE')
 C      OPEN (UNIT=7,FILE='SNPCAL.OUT',STATUS='NEW')
-      OPEN (UNIT=7,FILE='SNPCAL.OUT',ACTION='WRITE',STATUS='REPLACE')
+C      OPEN (UNIT=7,FILE='SNPCAL.OUT',ACTION='WRITE',STATUS='REPLACE')
       READ (2,1) (((AMONTH(I,J,K),K=1,13),J=1,7),I=1,12)
       READ (2,2) (ANAM(I),I=1,22)
       READ (2,3) (((ANUM(I,J,K),J=1,10),K=1,5),I=1,2)
@@ -180,7 +182,7 @@ C      OPEN (UNIT=7,FILE='SNPCAL.OUT',STATUS='NEW')
       GO TO 205
 230   CALL SNPPIC
 C     WRITE OUTPUT TAPE 1,5,((CAL(I,J),J=1,22),I=1,60)
-      WRITE (7,5) ((CAL(I,J),J=1,22),I=1,60)
+      WRITE (output_unit, '(22A6)') ((CAL(I,J),J=1,22),I=1,60)
 51    CONTINUE
       IF (IYR-IYRLST) 235,100,100
 235   NODS(2)=NODS(2)-LPYRSW
@@ -192,15 +194,13 @@ C     WRITE OUTPUT TAPE 1,5,((CAL(I,J),J=1,22),I=1,60)
 2     FORMAT (11A6)
 3     FORMAT (10A6)
 4     FORMAT (12I6)
-5     FORMAT (22A6)
-6     FORMAT (/,1X)
 
       contains
 
       SUBROUTINE SNPPIC
 C     THIS SUBROUTINE WILL ANALYZE THE INPUT DATA AND PRINT A PICTURE
 C     YOU CAN EXPECT TO GET 1 WARNING MESSAGE DURING COMPILATION
-      use, intrinsic :: iso_fortran_env, only : stderr => error_unit
+      use, intrinsic :: iso_fortran_env, only : output_unit
       DIMENSION ILINE(133),INUM(50),ICHR(50)
       integer :: ierr
       COMMON ISET
@@ -220,7 +220,7 @@ C     YOU CAN EXPECT TO GET 1 WARNING MESSAGE DURING COMPILATION
 C     HERE WE WRITE A LINE TO THE PRINTER AND GO BUILD ANOTHER
       DO 15 L=K,133
 15    ILINE(L)=ICHR(I)
-      WRITE (7,2000) (ILINE(K),K=1,131)
+      WRITE (output_unit, '(A133)') (ILINE(K),K=1,131)
       ILINE(1)=IBLNK
       DO 20 K=2,133
 20    ILINE(K)=ICHR(I)
@@ -238,7 +238,6 @@ C     HERE WE EXIT THE PICTURE AND RETURN TO THE CALLING PROGRAM
 200   RETURN
 C     FORMAT STATEMENTS
 1000  FORMAT (25(I2,A1))
-2000  FORMAT (133A1)
       END subroutine snppic
 
       END program
