@@ -20,7 +20,7 @@ cmake --workflow default
 
 ## Usage
 
-It seems from a cursory check that the output may be valid from year 1753 through year 3000 or more.
+The output seems valid from year 1753 through about year 3000.
 
 The output is printed to the Terminal stdout, so simply redirect stdout to a file or pipe to a convertor like Pandoc to save.
 The one needed parameter is year, and month is optional (defaults to 1).
@@ -29,7 +29,12 @@ The one needed parameter is year, and month is optional (defaults to 1).
 build/snpcal 2026 > out.txt
 ```
 
-To properly see the calendar in your terminal, your terminal must be at least 133 columns wide.
+## Usage
+
+It seems from a cursory check that the output may be valid from year 1753 through year 3000 or more.
+
+The output is printed to the Terminal, so simply redirect stdout to a file to save.
+To see the calendar in your terminal, your terminal must be at least 133 columns wide.
 
 Specify year and month.
 To make a July 2018 calendar, output to terminal:
@@ -57,8 +62,7 @@ build/snpcal 2026 > out.txt
 * Linux: `apt install pandoc` or similar
 
 
-That creates `mycal.pdf` which should be a single page, approximately centered.
-Adjust the `enscript` command line parameters if it doesn't look right.
+To **print a calendar** open the output in a text editor or Office software and print as usual.
 
 ### Custom images
 
