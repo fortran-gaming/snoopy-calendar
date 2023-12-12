@@ -10,7 +10,7 @@ Modified:
 * Fortran 2003 command line input of year/month
 * remove Fortran 66 Hollerith characters
 
-## Build
+build with:
 
 ```sh
 cmake -B build
@@ -26,33 +26,27 @@ ctest --test-dir build -V
 
 ## Usage
 
-It seems from a cursory check that the output may be valid from year 1753 through year 3000 or more.
+The output seems valid from year 1753 through about year 3000.
 
 The output is printed to the Terminal, so simply redirect stdout to a file to save.
-To see the calendar in your terminal, your terminal must be at least 133 columns wide.
+The two needed parameters are year and month.
+
+```sh
+build/snpcal 2023 12 > cal.txt
+```
+
+To properly see the calendar in your terminal, your terminal must be at least 133 columns wide.
 
 Specify year and month.
 To make a July 2018 calendar, output to terminal:
 
 ```sh
-./snpcal 2018 7
+build/snpcal 2018 7
 ```
 
-### Create PDF
+The simplest way to **create a PDF calendar** is to open the text output in say LibreOffice or Microsoft Office or Notepad etc. and "print to PDF".
 
-This procedure is specific to Linux, but may be adapted to other OS.
-
-1. install:
-   ```sh
-   apt install enscript ghostscript
-   ```
-2. for each month wanted (here, July 2018)
-   ```sh
-   ./snpcal.sh 2018 7
-   ```
-
-That creates `mycal.pdf` which should be a single page, approximately centered.
-Adjust the `enscript` command line parameters if it doesn't look right.
+To **print a calendar** open the output in a text editor or Office software and print as usual.
 
 ### Custom images
 
