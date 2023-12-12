@@ -200,7 +200,7 @@ C     WRITE OUTPUT TAPE 1,5,((CAL(I,J),J=1,22),I=1,60)
       SUBROUTINE SNPPIC
 C     THIS SUBROUTINE WILL ANALYZE THE INPUT DATA AND PRINT A PICTURE
 C     YOU CAN EXPECT TO GET 1 WARNING MESSAGE DURING COMPILATION
-      use, intrinsic :: iso_fortran_env, only : output_unit
+      use, intrinsic :: iso_fortran_env, only : output_unit, error_unit
       DIMENSION ILINE(133),INUM(50),ICHR(50)
       integer :: ierr
       COMMON ISET
@@ -212,7 +212,7 @@ C     YOU CAN EXPECT TO GET 1 WARNING MESSAGE DURING COMPILATION
       IF (is_iostat_end(ierr) .or. is_iostat_eor(ierr)) then
             return
       elseif (ierr /= 0) then
-            !! the original code did not check for end of file, gfortran code 5008
+            write(error_unit, '(a,i0)') 'snppic error code ', ierr
             return
       endif
       DO 40 I=1,ISET
