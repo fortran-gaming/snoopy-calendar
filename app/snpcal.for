@@ -68,6 +68,8 @@ C      OPEN (UNIT=7,FILE='SNPCAL.OUT',ACTION='WRITE',STATUS='REPLACE')
       READ (2,1) BLANK,ONE,ALIN1,ALIN2,ALIN3,ALIN4
       READ (2,4) MF,IYR,MTHLST,IYRLST,LNSW
 
+      ! print*, "TRACE", MF, IYR, MTHLST, IYRLST, LNSW
+
       block
       character(4) :: argv
       integer :: ierr, L
@@ -213,7 +215,9 @@ C     YOU CAN EXPECT TO GET 1 WARNING MESSAGE DURING COMPILATION
             return
       elseif (ierr /= 0) then
             write(error_unit, '(a,i0)') 'snppic error code ', ierr
-            return
+            write(error_unit, *) inum
+            write(error_unit, *) ichr
+            error stop
       endif
       DO 40 I=1,ISET
       IF (INUM(I) .NE. -1) GOTO 100
@@ -226,7 +230,7 @@ C     HERE WE WRITE A LINE TO THE PRINTER AND GO BUILD ANOTHER
 20    ILINE(K)=ICHR(I)
       K=1
 C      I=I+1
-100   IF (INUM(I) .EQ. -2) GOTO 200
+100   IF (INUM(I) .EQ. -2) return
       IF (INUM(I) .EQ. 0) GOTO 40
       DO 30 J=1,INUM(I)
       ILINE(K)=ICHR(I)
@@ -234,8 +238,7 @@ C      I=I+1
 30    CONTINUE
 40    CONTINUE
       GOTO 10
-C     HERE WE EXIT THE PICTURE AND RETURN TO THE CALLING PROGRAM
-200   RETURN
+
 C     FORMAT STATEMENTS
 1000  FORMAT (25(I2,A1))
       END subroutine snppic
