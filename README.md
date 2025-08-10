@@ -1,6 +1,6 @@
 # Fortran Snoopy Calendar
 
-[![Actions Status](https://github.com/fortran-gaming/snoopy-calendar/workflows/ci_cmake/badge.svg)](https://github.com/fortran-gaming/snoopy-calendar/actions)
+[![ci_cmake](https://github.com/fortran-gaming/snoopy-calendar/actions/workflows/ci_cmake.yml/badge.svg)](https://github.com/fortran-gaming/snoopy-calendar/actions/workflows/ci_cmake.yml)
 
 The classic Fortran 66 Peanuts calendar generator...with a dash of Fortran 2008, in a single .f file.
 
