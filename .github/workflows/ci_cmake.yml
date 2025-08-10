@@ -15,4 +15,4 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - run: cmake --workflow --preset default
+    - run: cmake --workflow default
