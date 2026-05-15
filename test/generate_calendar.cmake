@@ -1,0 +1,4 @@
+execute_process(COMMAND ${exe} 2018 7
+OUTPUT_FILE ${out}
+COMMAND_ERROR_IS_FATAL ANY
+)

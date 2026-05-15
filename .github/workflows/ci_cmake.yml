@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - "**.f"
+      - "**.for"
       - "**/CMakeLists.txt"
       - "**.cmake"
       - ".github/workflows/ci_cmake.yml"
@@ -13,6 +14,6 @@ jobs:
   linux:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
 
     - run: cmake --workflow default

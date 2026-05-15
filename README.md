@@ -1,55 +1,61 @@
 # Fortran Snoopy Calendar
 
-[![ci_cmake](https://github.com/fortran-gaming/snoopy-calendar/actions/workflows/ci_cmake.yml/badge.svg)](https://github.com/fortran-gaming/snoopy-calendar/actions/workflows/ci_cmake.yml)
+[![Actions Status](https://github.com/fortran-gaming/snoopy-calendar/workflows/ci_cmake/badge.svg)](https://github.com/fortran-gaming/snoopy-calendar/actions)
 
 The classic Fortran 66 Peanuts calendar generator...with a dash of Fortran 2008, in a single .f file.
 
+[Original code](https://www.ibiblio.org/pub/academic/computer-science/history/pdp-11/rsts/decus/sig87/087018/)
+is stored under [ref/](./ref).
 Modified:
 
 * uses Fortran 2008 file open() and close()
 * Fortran 2003 command line input of year/month
 * remove Fortran 66 Hollerith characters
 
-## Build
+Build and test SnpCal with:
 
 ```sh
-cmake -B build
-
-cmake --build build
-```
-
-test output with
-
-```sh
-ctest --test-dir build -V
+cmake --workflow default
 ```
 
 ## Usage
 
 It seems from a cursory check that the output may be valid from year 1753 through year 3000 or more.
 
-The output is printed to the Terminal, so simply redirect stdout to a file to save.
-To see the calendar in your terminal, your terminal must be at least 133 columns wide.
+The output is printed to the Terminal stdout, so simply redirect stdout to a file or pipe to a convertor like Pandoc to save.
+The one needed parameter is year, and month is optional (defaults to 1).
+
+```sh
+build/snpcal 2026 > out.txt
+```
+
+To properly see the calendar in your terminal, your terminal must be at least 133 columns wide.
 
 Specify year and month.
 To make a July 2018 calendar, output to terminal:
 
 ```sh
-./snpcal 2018 7
+build/snpcal 2018 7
 ```
 
-### Create PDF
+Make a PDF with Pandoc.
+This is scripted in "snpcal.sh" for Unix-like systems, and "snpcal.ps1" for Windows PowerShell:
 
-This procedure is specific to Linux, but may be adapted to other OS.
+```sh
+build/snpcal 2026 > out.txt
 
-1. install:
-   ```sh
-   apt install enscript ghostscript
-   ```
-2. for each month wanted (here, July 2018)
-   ```sh
-   ./snpcal.sh 2018 7
-   ```
+(echo '```'; cat out.txt; echo '```') | pandoc --from=markdown --to=pdf \
+  --columns=133 --wrap=none \
+  -V geometry=landscape,margin=0.4cm \
+  -o calendar.pdf
+```
+
+[Pandoc](https://pandoc.org/) is available across OSes:
+
+* Windows: `winget install JohnMacFarlane.Pandoc`
+* macOS: `brew install pandoc`
+* Linux: `apt install pandoc` or similar
+
 
 That creates `mycal.pdf` which should be a single page, approximately centered.
 Adjust the `enscript` command line parameters if it doesn't look right.
