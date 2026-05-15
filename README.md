@@ -61,7 +61,6 @@ build/snpcal 2026 > out.txt
 * macOS: `brew install pandoc`
 * Linux: `apt install pandoc` or similar
 
-
 To **print a calendar** open the output in a text editor or Office software and print as usual.
 
 ### Custom images
